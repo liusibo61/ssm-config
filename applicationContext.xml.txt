@@ -15,17 +15,20 @@
     <!--开启声明切面和切入点的注解支持-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
+    <!-- 加载配置文件db.properties ，注意不能取名为username因为电脑里可能有其他隐藏的变量名字和这个重名-->
+    <context:property-placeholder location="classpath:db.properties"/>
     <!--获得数据源datasource-->
     <bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ssm?serverTimezone=Hongkong"/>
-        <property name="user" value="root"/>
-        <property name="password" value="123456"/>
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <!--获得sqlSessionFactory-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="datasource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
     <!--自动扫描dao,并注入到Spring ioc容器中-->
